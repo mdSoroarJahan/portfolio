@@ -4,11 +4,12 @@
   --bg-alt: #efe6d8;
   --ink: #1f1a14;
   --muted: #5b5246;
-  --accent: #b85c38;
-  --accent-2: #2f4f5b;
+  --accent: #1d4ed8;
+  --accent-2: #f59e0b;
   --card: #fbf7f1;
   --border: #d9cabb;
-  --shadow: 0 24px 60px rgba(37, 26, 18, 0.18);
+  --shadow: 0 24px 60px rgba(29, 78, 216, 0.18);
+  --shadow-soft: 0 16px 30px rgba(31, 26, 20, 0.12);
 }
 
 * {
@@ -21,6 +22,8 @@ body {
   color: var(--ink);
   background: radial-gradient(circle at top, #fff6ea 0%, var(--bg) 45%, #e9ded0 100%);
   min-height: 100vh;
+  scroll-behavior: smooth;
+  animation: pageIn 0.8s ease both;
 }
 
 h1,
@@ -126,7 +129,7 @@ a {
   font-weight: 600;
   border: 1px solid transparent;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  box-shadow: 0 12px 30px rgba(184, 92, 56, 0.26);
+  box-shadow: 0 12px 30px rgba(29, 78, 216, 0.26);
 }
 
 .button:hover {
@@ -144,6 +147,18 @@ a {
   position: relative;
   padding: 100px 0 70px;
   z-index: 1;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: -40% 20% auto -20%;
+  height: 320px;
+  background: conic-gradient(from 120deg, #d7e3ff, #1d4ed8, #f59e0b, #d7e3ff);
+  filter: blur(80px);
+  opacity: 0.35;
+  animation: floatGlow 12s ease-in-out infinite;
+  z-index: -1;
 }
 
 .hero-grid {
@@ -198,6 +213,7 @@ a {
   box-shadow: var(--shadow);
   position: relative;
   overflow: hidden;
+  animation: cardFloat 10s ease-in-out infinite;
 }
 
 .hero-card::before {
@@ -217,11 +233,33 @@ a {
   color: var(--accent-2);
 }
 
+.hero-media {
+  position: relative;
+  width: min(320px, 80vw);
+  height: 360px;
+  margin: 18px 0 24px;
+}
+
+.hero-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  background: transparent;
+  padding: 0;
+  transform: translateX(-28px);
+}
+
 .hero-monogram {
   font-family: "Playfair Display", serif;
-  font-size: 80px;
-  margin: 18px 0 24px;
+  font-size: 72px;
   color: var(--ink);
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  opacity: 0.08;
+  pointer-events: none;
 }
 
 .hero-meta {
@@ -298,11 +336,17 @@ a {
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 24px;
-  padding: 26px;
-  box-shadow: 0 20px 40px rgba(51, 35, 21, 0.12);
+  padding: 28px;
+  box-shadow: var(--shadow-soft);
   display: grid;
   gap: 14px;
   min-height: 280px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 22px 45px rgba(29, 78, 216, 0.18);
 }
 
 .card-header {
@@ -314,16 +358,37 @@ a {
 
 .tag {
   padding: 6px 12px;
-  background: rgba(47, 79, 91, 0.12);
+  background: rgba(29, 78, 216, 0.12);
   border-radius: 999px;
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.18em;
 }
 
+.badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.badge-row span {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--border);
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  height: 30px;
+}
+
 .stack {
   font-weight: 600;
   color: var(--ink);
+  font-size: 14px;
 }
 
 .muted {
@@ -381,6 +446,48 @@ a {
   font-size: 14px;
 }
 
+.card-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.button.small {
+  padding: 10px 16px;
+  font-size: 14px;
+}
+
+@keyframes floatGlow {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(6%, 8%, 0) scale(1.08);
+  }
+}
+
+@keyframes pageIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes cardFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
 .reveal {
   opacity: 0;
   transform: translateY(20px);
@@ -411,9 +518,29 @@ a {
     flex-direction: column;
     align-items: flex-start;
   }
+
+  .hero-media {
+    width: min(220px, 70vw);
+  }
 }
 
 @media (max-width: 600px) {
+  .section {
+    padding: 64px 0;
+  }
+
+  .card {
+    padding: 22px;
+  }
+
+  .hero h1 {
+    font-size: 2.1rem;
+  }
+
+  .lead {
+    font-size: 1rem;
+  }
+
   .hero-actions {
     flex-direction: column;
     align-items: stretch;
